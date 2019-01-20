@@ -73,6 +73,8 @@ imageWrap.appendChild(canvas);
 app.addEventListener("drop", dropFiles);
 app.addEventListener("dragover", event => event.preventDefault());
 
+init()
+
 function dropFiles(event) {
 	event.preventDefault();
 	if (image.style.display == "none") {
@@ -100,16 +102,30 @@ newImg.addEventListener("click", (event) => {
 	input.accept = "image/jpeg, image/png";
 	input.click();
 	input.addEventListener("change", event => {
+		if(canvas) {
+			resetCanvas()
+		}
 		const file = event.currentTarget.files[0];
 		sendFile(file);
 	});
 });
 
 function resetComment() {
+
+
+	// const comments = document.querySelectorAll(".c");
+	// Array.from(commentsForm).forEach(comment => {
+	// 	comment.remove()
+	// })
 	const comments = app.querySelectorAll("[data-top]");
-	for (const comment of comments) {
-    	app.removeChild(comment);
-	}	
+	Array.from(comments).forEach(comment => {
+		comment.remove()
+
+	})
+
+	// for (const comment of comments) {
+ //    	app.removeChild(comment);
+	// }	
 }
 
 function resetCanvas() {
@@ -119,6 +135,7 @@ function resetCanvas() {
 	const resetImageDraw = canvas;
 	const canvasContextResetImg = resetImageDraw.getContext('2d');
     canvasContextResetImg.clearRect(0, 0, resetImageDraw.width, resetImageDraw.height);
+    
 };
 
 burger.addEventListener("click", () => {
@@ -319,11 +336,12 @@ function placeMask(url) {
 	const context = maskLayer.getContext("2d");
     context.clearRect(0, 0, maskLayer.width, maskLayer.height); 
 	let img = new Image;
+	img.src = url;
 
 	img.addEventListener("load", () => { 
     	context.drawImage(img, 0, 0); 
 	});
-	img.src = url;
+
 };
 
 //comments
@@ -384,6 +402,7 @@ commentLoader.style.display = "none";
 
 mask.addEventListener("click", event => {
 
+
 	if (commentsTools.style.display == "inline-block" && commentsOn.checked) {		
 		const markers = document.querySelectorAll(".comments__marker-checkbox");
 		for (const marker of markers) {
@@ -398,6 +417,7 @@ mask.addEventListener("click", event => {
 		commentForm.querySelector(".comments__marker-checkbox").checked = true;
 		commentForm.querySelector(".comments__input").focus();
 		commentForm.style.zIndex = 100;
+		
 
 		commentForm.querySelector(".comments__close").addEventListener("click", event => {
 
@@ -409,6 +429,9 @@ mask.addEventListener("click", event => {
 app.addEventListener("submit", event => {
 	event.preventDefault();
 	event.target.querySelector(".comment__loader").style.display = "initial";
+	
+
+
 	event.target.querySelector(".comments__marker-checkbox").checked = true;
 	
 	const input = event.target.querySelector(".comments__input"),
@@ -527,7 +550,9 @@ function showCommentForm() {
 
 //server
 
-if (performance.navigation.type === 1 || window.location.href.indexOf("?id=") !== -1) {
+function init() {
+	
+	if (window.location.href.indexOf("?id=") !== -1) {
     image.src = localStorage.getItem("saveImg");
     id = localStorage.getItem("saveId");
     image.style.display = "inline-block";
@@ -535,10 +560,6 @@ if (performance.navigation.type === 1 || window.location.href.indexOf("?id=") !=
     comments.style.display = "inline-block";
 	commentsTools.style.display = "inline-block";
 	newImg.style.display = "none";
-	
-	menuUrl.value = 
-		window.location.protocol + "//" + window.location.host 
-		+ window.location.pathname + "?id=" + id;
 
 	setTimeout(function() {
 		mask.width = image.clientWidth
@@ -552,28 +573,36 @@ if (performance.navigation.type === 1 || window.location.href.indexOf("?id=") !=
 	
 	socketConnect();
 	
-};
+	};
+}
+
+let host
 
 function sendFile(file) {
+
 	const formData = new FormData();
 	formData.append("title", file.name);
 	formData.append("image", file);
 
 	const xhr = new XMLHttpRequest();
 	xhr.open("POST", "https://neto-api.herokuapp.com/pic");
-
 	xhr.addEventListener("loadstart", () => {
 		image.style.display = "none";
 		imageLoader.style.display = "initial";
 	});
 
-	xhr.addEventListener("loadend", () =>
-		imageLoader.style.display = "none");
+	xhr.addEventListener("loadend", () => {
+		imageLoader.style.display = "none"
+		
+		
+	});
 
 	xhr.addEventListener("load", () => {
 		if (xhr.status === 200) {
+			init()
 			response = JSON.parse(xhr.responseText);
 			console.log(response);
+
 			id = response.id;
 			newImg.style.display = "none";
 			comments.style.display = "none";
@@ -581,19 +610,25 @@ function sendFile(file) {
 			burger.style.display = "inline-block";
 			share.style.display = "inline-block";
 			shareTools.style.display = "inline-block";
-			menuUrl.value = 
-				window.location.protocol + "//" + window.location.host 
-				+ window.location.pathname + "?id=" + id;
+			host = `${window.location.origin}${window.location.pathname}?id=${id}`;
+    		localStorage.host = host;
+    		menuUrl.value = host;
 
 			setTimeout(function() {
 				mask.width = image.clientWidth;
 				mask.height = image.clientHeight;
+				document.querySelector(".comment__form").style.display = "none";
+				const markers = document.querySelectorAll(".comments__marker-checkbox");
+				for (const marker of markers) {
+					marker.checked = false;
+				}
+				
 				resetComment();
 				resetCanvas();
 			}, 2000);
 
 			socketConnect();
-			
+			history.pushState(null, null, host);
 		}
 	});
 
@@ -617,11 +652,17 @@ function socketConnect() {
 			image.src = message.pic.url;
 			image.style.display = "initial";
 
+
+
 		    image.addEventListener("load", () => {
 				if (message.pic.mask) {
 					setTimeout(function() {
 						placeMask(message.pic.mask);
-					}, 1000);	
+						
+					}, 1000);
+					
+			    } else {
+			    	resetCanvas()
 			    }
 			    if (message.pic.comments) {
 			    	const markers = document.querySelectorAll(".comments__marker-checkbox");
@@ -639,6 +680,7 @@ function socketConnect() {
 		        
 		if (message.event == "mask") {
 			placeMask(message.url);
+			
 		}
 	});
 
