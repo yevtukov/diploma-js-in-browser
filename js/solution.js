@@ -31,7 +31,7 @@ if (localStorage.getItem("posX")) {
 }
 
 app.removeChild(commentsForm);
-resetComment();
+
 
 image.style.display = "none";
 image.style.position = "relative"
@@ -47,6 +47,8 @@ draw.style.display = "none";
 const imageWrap = document.createElement("div");
 let mask = document.createElement("canvas"),
 	canvas = document.createElement("canvas");
+
+resetComment();
 
 mask.style.position = "absolute"
 mask.style.top = "0"
@@ -115,6 +117,7 @@ function resetComment() {
 	const comments = app.querySelectorAll("[data-top]");
 	Array.from(comments).forEach(comment => {
 		comment.remove()
+
 	})	
 }
 
@@ -219,6 +222,9 @@ function moveFloatMenu() {
 
 moveFloatMenu()
 
+
+
+
 draw.addEventListener("click", () => {
 	newImg.style.display = "none";
 	comments.style.display = "none";
@@ -232,7 +238,7 @@ draw.addEventListener("click", () => {
 		
 	const ctx = canvas.getContext("2d"), brushSize = 4;
 	let color = "#6cbe47", curves = [], drawing = false, isRepaint = false;
-	//const colors = {red:"#ea5d56", yellow: "#f3d135", green: "#6cbe47", blue: "#53a7f5", purple: "#b36ade"}
+	
 	document.querySelector(".red").addEventListener("click", () =>
 		color = "#ea5d56");
 	document.querySelector(".yellow").addEventListener("click", () =>
@@ -380,7 +386,8 @@ commentSubmit.className = "comments__submit";
 commentSubmit.type = "submit";
 commentSubmit.value = "Отправить";
 
-app.appendChild(commentForm);
+imageWrap.appendChild(commentForm);
+
 commentForm.appendChild(commentMarker);
 commentForm.appendChild(commentMarkerCheck);
 commentForm.appendChild(commentBody);
@@ -396,6 +403,7 @@ commentBody.appendChild(commentClose);
 commentBody.appendChild(commentSubmit);
 
 commentForm.style.display = "none";
+
 commentForm.style.position = "absolute"
 commentLoader.style.display = "none";
 
@@ -409,9 +417,11 @@ mask.addEventListener("click", event => {
 
 		}
 
-		commentForm.style.top = `${event.clientY -14}px`;
-		commentForm.style.left = `${event.clientX - 22}px`;
+		commentForm.style.top = `${event.offsetY - 14}px`;
+		commentForm.style.left = `${event.offsetX - 22}px`;
 		commentForm.style.display = "initial";
+		
+
 		commentForm.querySelector(".comment__loader").style.display = "none";
 		commentForm.querySelector(".comments__marker-checkbox").checked = true;
 		commentForm.querySelector(".comments__input").focus();
@@ -508,7 +518,7 @@ function placeComment(comment) {
     	commentEl.querySelector(".comments__marker-checkbox").checked = false;
     });
 	
-	app.appendChild(commentEl);
+	imageWrap.appendChild(commentEl);
 	showCommentForm();
 };
 
