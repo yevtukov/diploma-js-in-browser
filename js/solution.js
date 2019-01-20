@@ -419,7 +419,8 @@ app.addEventListener("submit", event => {
 });
 
 function sendComment(comment) {
-	commentForm.reset();
+
+	commentInput.value = '';
 	let requestArray = [];
 	for (let property in comment) {
 		let encodedKey = encodeURIComponent(property);
@@ -481,6 +482,7 @@ function placeComment(comment) {
 
 	const closeBtn = commentEl.querySelector(".comments__close");
     closeBtn.addEventListener("click", () => {
+    	commentForm.reset();
     	commentEl.querySelector(".comments__marker-checkbox").checked = false;
     });
 	
