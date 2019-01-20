@@ -112,20 +112,10 @@ newImg.addEventListener("click", (event) => {
 
 function resetComment() {
 
-
-	// const comments = document.querySelectorAll(".c");
-	// Array.from(commentsForm).forEach(comment => {
-	// 	comment.remove()
-	// })
 	const comments = app.querySelectorAll("[data-top]");
 	Array.from(comments).forEach(comment => {
 		comment.remove()
-
-	})
-
-	// for (const comment of comments) {
- //    	app.removeChild(comment);
-	// }	
+	})	
 }
 
 function resetCanvas() {
@@ -182,7 +172,7 @@ menuCopy.addEventListener("click", () => {
     alert('Ссылка скопирована в буфер обмена') 
 });
 
-let floatMenu = null, shiftX = 0, shiftY = 0, minY, minX, maxX, maxY;
+let floatMenu = null, shiftX = 0, shiftY = 0, minY, minX, maxX, maxY, movedPiece = null;
 
 const dragStart = event => {
     floatMenu = menu;
@@ -192,6 +182,7 @@ const dragStart = event => {
     maxY = app.offsetTop + app.offsetHeight - floatMenu.offsetHeight;
     shiftX = event.pageX - event.target.getBoundingClientRect().left - window.pageXOffset;
     shiftY = event.pageY - event.target.getBoundingClientRect().top - window.pageYOffset;
+    
 };
 
 const dragMenu = ((x, y) => {
@@ -211,14 +202,22 @@ const dragMenu = ((x, y) => {
 drag.addEventListener("mousedown", dragStart);
 drag.addEventListener("mouseup", event => floatMenu = null);
 drag.addEventListener("mouseup", setCoordinates);
+document.addEventListener("mousemove", event => dragMenu(event.pageX, event.pageY));
 
 function setCoordinates(event) {
 	localStorage.setItem("posX", menu.style.left)
 	localStorage.setItem("posY", menu.style.top)
 }
 
+function moveFloatMenu() {
+    if (app.getBoundingClientRect().right - menu.getBoundingClientRect().right < 5) {
+        menu.style.left = (app.offsetWidth - menu.offsetWidth) - 10 + 'px';
 
-document.addEventListener("mousemove", event => dragMenu(event.pageX, event.pageY));
+    }
+    requestAnimationFrame(moveFloatMenu);
+}
+
+moveFloatMenu()
 
 draw.addEventListener("click", () => {
 	newImg.style.display = "none";
