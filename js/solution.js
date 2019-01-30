@@ -115,7 +115,7 @@ newImg.addEventListener('click', (event) => {
 function resetComment() {
 
 	const comments = app.querySelectorAll('[data-top]');
-	Array.from(comments).forEach(comment => {
+	comments.forEach(comment => {
 		comment.remove()
 
 	})	
@@ -552,7 +552,7 @@ function showCommentForm() {
 
 	const cmntsForm = document.querySelectorAll('.comment__form')
 	
-	Array.from(cmntsForm).forEach(cmnt => {
+	cmntsForm.forEach(cmnt => {
 		if (commentsOn.checked) {
 			cmnt.style.display = 'block';
 		} else {
