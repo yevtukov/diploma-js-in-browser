@@ -431,6 +431,10 @@ mask.addEventListener("click", event => {
 		commentForm.querySelector(".comments__close").addEventListener("click", event => {
 
 			commentForm.querySelector(".comments__marker-checkbox").checked = false;
+			
+			if(!commentForm.querySelector(".comment__message").textContent) {
+				commentForm.style.display = "none";
+			}
 		});
 	}
 });
@@ -573,11 +577,11 @@ function init() {
 	setTimeout(function() {
 		mask.width = image.clientWidth
 		mask.height = image.clientHeight;
-		document.querySelector(".comment__form").style.display = "none";
-		const markers = document.querySelectorAll(".comments__marker-checkbox");
-		for (const marker of markers) {
-			marker.checked = false;
-		}
+		// document.querySelector(".comment__form").style.display = "none";
+		// const markers = document.querySelectorAll(".comments__marker-checkbox");
+		// for (const marker of markers) {
+		// 	marker.checked = false;
+		// }
 	}, 2000);
 	
 	socketConnect();
