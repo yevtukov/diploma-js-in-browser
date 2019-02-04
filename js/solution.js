@@ -32,40 +32,15 @@ if (localStorage.getItem('posX')) {
 
 app.removeChild(commentsForm);
 
-
-image.style.display = 'none';
-image.style.position = 'relative'
-image.style.top = '0'
-image.style.left = '0'
-image.style.transform = 'initial'
-burger.style.display = 'none';
-share.style.display = 'none';
-
-comments.style.display = 'none';
-draw.style.display = 'none';
-
 const imageWrap = document.createElement('div');
 let mask = document.createElement('canvas'),
 	canvas = document.createElement('canvas');
 
 resetComment();
 
-mask.style.position = 'absolute'
-mask.style.top = '0'
-mask.style.left = '0'
-mask.style.zIndex = '50'
-canvas.style.position = 'absolute'
-canvas.style.top = '0'
-canvas.style.left = '0'
-
-
 imageWrap.className = 'image-wrap';
 mask.className = 'mask';
 canvas.className = 'canvas';
-imageWrap.style.position = 'absolute'
-imageWrap.style.top = '50%'
-imageWrap.style.left = '50%'
-imageWrap.style.transform = 'translate(-50%, -50%)'
 
 app.appendChild(imageWrap);
 imageWrap.appendChild(image);
