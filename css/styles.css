@@ -665,3 +665,52 @@ body {
 .menu[data-state="selected"] > .menu__item[data-state="selected"], .menu__item[data-state="selected"] + .tool {
   display: inline-block;
 }
+
+/*/////////////////////////////////*/
+
+
+.current-image {
+  display: none;
+  position: relative;
+  top: 0;
+  left: 0;
+  transform: initial;
+
+}
+
+.burger {
+  display: none;
+}
+
+.share {
+  display: none;
+}
+
+.comments {
+  display: none;
+}
+
+.draw {
+  display: none;
+}
+
+
+.mask {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 50;
+}
+
+.canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.image-wrap {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
