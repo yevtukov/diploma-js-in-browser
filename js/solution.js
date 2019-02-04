@@ -115,6 +115,8 @@ burger.addEventListener('click', () => {
 	comments.style.display = 'inline-block';
 	draw.style.display = 'inline-block';
 	share.style.display = 'inline-block';
+
+
 });
 
 comments.addEventListener('click', () => {
@@ -245,14 +247,22 @@ draw.addEventListener('click', () => {
 	    ctx.stroke();
 	}
 
-	canvas.addEventListener('mousedown', (event) => { 
-		if (drawTools.style.display == 'inline-block') {
-			drawing = true;
+	canvas.addEventListener('mousedown', function (event) { 
+		// if (drawTools.style.display == 'inline-block') {
+		// 	drawing = true;
+	 //  		const curve = [];
+		// 	curve.push([event.offsetX, event.offsetY]);
+		// 	curves.push(curve);
+		// 	isRepaint = true;
+		// }
+
+   		 if (drawTools.style.display !== 'inline-block') return;
+
+   		 	drawing = true;
 	  		const curve = [];
 			curve.push([event.offsetX, event.offsetY]);
 			curves.push(curve);
 			isRepaint = true;
-		}  
 	});
 
 	canvas.addEventListener('mouseup', (event) => {
@@ -287,12 +297,12 @@ draw.addEventListener('click', () => {
 	    drawing = false;
 	});
 
-	canvas.addEventListener('mousemove', (event) => {
-	    if (drawing) { 
+	canvas.addEventListener('mousemove', function(event) {
+	    if (!drawing) return; 
 	      const point = [event.offsetX, event.offsetY];
 	      curves[curves.length - 1].push(point);
 	      isRepaint = true;
-	    }
+	    
 	});
 
 	function repaint () {
@@ -384,8 +394,8 @@ commentLoader.style.display = 'none';
 
 mask.addEventListener('click', event => {
 
+	if (!commentsTools.style.display == 'inline-block' && commentsOn.checked) return; {	
 
-	if (commentsTools.style.display == 'inline-block' && commentsOn.checked) {		
 		const markers = document.querySelectorAll('.comments__marker-checkbox');
 		for (const marker of markers) {
 			marker.checked = false;
@@ -552,11 +562,11 @@ function init() {
 	setTimeout(function() {
 		mask.width = image.clientWidth
 		mask.height = image.clientHeight;
-		// document.querySelector('.comment__form').style.display = 'none';
-		// const markers = document.querySelectorAll('.comments__marker-checkbox');
-		// for (const marker of markers) {
-		// 	marker.checked = false;
-		// }
+		document.querySelector('.comment__form').style.display = 'none';
+		const markers = document.querySelectorAll('.comments__marker-checkbox');
+		for (const marker of markers) {
+			marker.checked = false;
+		}
 	}, 2000);
 	
 	socketConnect();
@@ -585,8 +595,8 @@ function sendFile(file) {
 		
 	});
 
-	xhr.addEventListener('load', () => {
-		if (xhr.status === 200) {
+	xhr.addEventListener('load', function() {
+		if (!xhr.status === 200) return; {
 			init()
 			response = JSON.parse(xhr.responseText);
 			console.log(response);
@@ -639,8 +649,6 @@ function socketConnect() {
 			localStorage.setItem('saveId', message.pic.id);
 			image.src = message.pic.url;
 			image.style.display = 'initial';
-
-
 
 		    image.addEventListener('load', () => {
 				if (message.pic.mask) {
