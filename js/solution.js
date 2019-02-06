@@ -50,7 +50,7 @@ imageWrap.appendChild(canvas);
 app.addEventListener('drop', dropFiles);
 app.addEventListener('dragover', event => event.preventDefault());
 
-init()
+// init()
 
 function dropFiles(event) {
 	event.preventDefault();
@@ -136,7 +136,8 @@ share.addEventListener('click', () => {
 		shareTools.style.display = 'none';
 		burger.style.display = 'inline-block';
 		comments.style.display = 'inline-block';
-		commentsTools.style.display = 'inline-block';	
+		commentsTools.style.display = 'inline-block';
+			
 	} else {
 		newImg.style.display = 'none';
 		comments.style.display = 'none';
@@ -145,6 +146,7 @@ share.addEventListener('click', () => {
 		shareTools.style.display = 'inline-block';
 	}
 });
+
 
 menuCopy.addEventListener('click', () => {
 	menuUrl.select();
@@ -392,9 +394,11 @@ commentForm.style.display = 'none';
 commentForm.style.position = 'absolute'
 commentLoader.style.display = 'none';
 
+init()
+
 mask.addEventListener('click', event => {
 
-	if (!commentsTools.style.display == 'inline-block' && commentsOn.checked) return; {	
+	if (commentsTools.style.display !== 'inline-block' && commentsOn.checked) return; {	
 
 		const markers = document.querySelectorAll('.comments__marker-checkbox');
 		for (const marker of markers) {
@@ -558,16 +562,25 @@ function init() {
     comments.style.display = 'inline-block';
 	commentsTools.style.display = 'inline-block';
 	newImg.style.display = 'none';
+	menuUrl.value= window.location.href
 
-	setTimeout(function() {
-		mask.width = image.clientWidth
-		mask.height = image.clientHeight;
+	// setTimeout(function() {
+	// 	mask.width = image.clientWidth
+	// 	mask.height = image.clientHeight;
+	// 	document.querySelector('.comment__form').style.display = 'none';
+	// 	const markers = document.querySelectorAll('.comments__marker-checkbox');
+	// 	for (const marker of markers) {
+	// 		marker.checked = false;
+	// 	}
+	// }, 2000);
+
 		document.querySelector('.comment__form').style.display = 'none';
+	
+		
 		const markers = document.querySelectorAll('.comments__marker-checkbox');
 		for (const marker of markers) {
 			marker.checked = false;
 		}
-	}, 2000);
 	
 	socketConnect();
 	
@@ -595,8 +608,8 @@ function sendFile(file) {
 		
 	});
 
-	xhr.addEventListener('load', function() {
-		if (!xhr.status === 200) return; {
+	xhr.addEventListener('load', () => {
+		if (!xhr.status === 200) {return}; 
 			init()
 			response = JSON.parse(xhr.responseText);
 			console.log(response);
@@ -609,25 +622,35 @@ function sendFile(file) {
 			share.style.display = 'inline-block';
 			shareTools.style.display = 'inline-block';
 			host = `${window.location.origin}${window.location.pathname}?id=${id}`;
-    		localStorage.host = host;
-    		menuUrl.value = host;
+    		// localStorage.host = host;
+    		
 
-			setTimeout(function() {
-				mask.width = image.clientWidth;
-				mask.height = image.clientHeight;
-				document.querySelector('.comment__form').style.display = 'none';
-				const markers = document.querySelectorAll('.comments__marker-checkbox');
-				for (const marker of markers) {
-					marker.checked = false;
-				}
+    		
 				
-				resetComment();
-				resetCanvas();
-			}, 2000);
+				
+				
+			
+
+			resetComment();
+			resetCanvas();
+
+			// setTimeout(function() {
+			// 	mask.width = image.clientWidth;
+			// 	mask.height = image.clientHeight;
+			// 	document.querySelector('.comment__form').style.display = 'none';
+			// 	const markers = document.querySelectorAll('.comments__marker-checkbox');
+			// 	for (const marker of markers) {
+			// 		marker.checked = false;
+			// 	}
+				
+			// 	resetComment();
+			// 	resetCanvas();
+			// }, 2000);
 
 			socketConnect();
 			history.pushState(null, null, host);
-		}
+			menuUrl.value = host;
+		
 	});
 
 	xhr.send(formData);
@@ -641,6 +664,17 @@ function socketConnect() {
 	});
 
 	wss.addEventListener('message', event => {
+
+		image.addEventListener('load', () => {
+			mask.width = image.clientWidth;
+				mask.height = image.clientHeight;
+				document.querySelector('.comment__form').style.display = 'none';
+				const markers = document.querySelectorAll('.comments__marker-checkbox');
+				for (const marker of markers) {
+					marker.checked = false;
+				}
+		})
+
 		let message = JSON.parse(event.data);
 		console.log(message);
 
@@ -652,26 +686,33 @@ function socketConnect() {
 
 		    image.addEventListener('load', () => {
 				if (message.pic.mask) {
-					setTimeout(function() {
+					// setTimeout(function() {
+					// 	placeMask(message.pic.mask);
+						
+					// }, 1000);
+
+
 						placeMask(message.pic.mask);
 						
-					}, 1000);
+					
 					
 			    } else {
 			    	resetCanvas()
 			    }
 			    if (message.pic.comments) {
+			    	
+			    	loadComments(message.pic.comments);
 			    	const markers = document.querySelectorAll('.comments__marker-checkbox');
 					for (const marker of markers) {
 						marker.checked = false;
 					}
-			    	loadComments(message.pic.comments);
-			    	
+			    	document.querySelector('.comment__form').style.display = 'none';
 			    }
 		    });
 		}
 		if (message.event == 'comment') {
 			renderComment(message.comment);
+			
 		}
 		        
 		if (message.event == 'mask') {
@@ -684,3 +725,10 @@ function socketConnect() {
 		console.log(`Ошибка: ${error.message}`);
 	});
 }
+
+
+// window.addEventListener('click', (event) => {
+// 	alert(`${event.target.className}`)
+
+// })
+
