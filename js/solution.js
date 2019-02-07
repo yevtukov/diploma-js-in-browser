@@ -21,7 +21,8 @@ const app = document.querySelector('.app'),
 	  image = document.querySelector('.current-image'),
 	  imageLoader = document.querySelector('.image-loader');
 
-let wss, response, id;
+let wss, response, id, isLoad, isShareToolsVisible, isDrawToolsVisible, 
+	isCommentsToolsVisible;
 
 
 if (localStorage.getItem('posX')) {
@@ -50,11 +51,9 @@ imageWrap.appendChild(canvas);
 app.addEventListener('drop', dropFiles);
 app.addEventListener('dragover', event => event.preventDefault());
 
-// init()
-
 function dropFiles(event) {
 	event.preventDefault();
-	if (image.style.display == 'none') {
+	if (!isLoad) {
 		let file = event.dataTransfer.files[0];
 		if ((file.type === 'image/png') || (file.type === 'image/jpeg')) {
 			err.style.display = 'none';
@@ -109,7 +108,9 @@ function resetCanvas() {
 burger.addEventListener('click', () => {
 	burger.style.display = 'none';
 	drawTools.style.display = 'none';
+	isDrawToolsVisible = false;
 	commentsTools.style.display = 'none';
+	isCommentsToolsVisible = false;
 	shareTools.style.display = 'none';
 	newImg.style.display = 'inline-block';
 	comments.style.display = 'inline-block';
@@ -127,23 +128,30 @@ comments.addEventListener('click', () => {
 	mask.style.zIndex = 20;	
 	burger.style.display = 'inline-block';
 	commentsTools.style.display = 'inline-block';
+	isCommentsToolsVisible = true;
 	
 });
 
 share.addEventListener('click', () => {
-	if (shareTools.style.display == 'inline-block') {
-		share.style.display = 'none';
-		shareTools.style.display = 'none';
-		burger.style.display = 'inline-block';
-		comments.style.display = 'inline-block';
-		commentsTools.style.display = 'inline-block';
-			
-	} else {
+
+	if (!isShareToolsVisible) {
+
 		newImg.style.display = 'none';
 		comments.style.display = 'none';
 		draw.style.display = 'none';
 		burger.style.display = 'inline-block';
 		shareTools.style.display = 'inline-block';
+		isShareToolsVisible = true;	
+	} else {
+		
+
+		share.style.display = 'none';
+		shareTools.style.display = 'none';
+		burger.style.display = 'inline-block';
+		comments.style.display = 'inline-block';
+		commentsTools.style.display = 'inline-block';
+		isCommentsToolsVisible = true;
+		isShareToolsVisible = false;
 	}
 });
 
@@ -201,9 +209,6 @@ function moveFloatMenu() {
 
 moveFloatMenu()
 
-
-
-
 draw.addEventListener('click', () => {
 	newImg.style.display = 'none';
 	comments.style.display = 'none';
@@ -212,6 +217,7 @@ draw.addEventListener('click', () => {
 	canvas.style.zIndex = 20;
 	burger.style.display = 'inline-block';
 	drawTools.style.display = 'inline-block';
+	isDrawToolsVisible = true;
 	canvas.width = image.width;
 	canvas.height = image.height;
 		
@@ -250,15 +256,9 @@ draw.addEventListener('click', () => {
 	}
 
 	canvas.addEventListener('mousedown', function (event) { 
-		// if (drawTools.style.display == 'inline-block') {
-		// 	drawing = true;
-	 //  		const curve = [];
-		// 	curve.push([event.offsetX, event.offsetY]);
-		// 	curves.push(curve);
-		// 	isRepaint = true;
-		// }
+		
 
-   		 if (drawTools.style.display !== 'inline-block') return;
+   		 if (!isDrawToolsVisible) return;
 
    		 	drawing = true;
 	  		const curve = [];
@@ -396,27 +396,26 @@ commentLoader.style.display = 'none';
 
 init()
 
-mask.addEventListener('click', event => {
-
-	if (commentsTools.style.display !== 'inline-block' && commentsOn.checked) return; {	
-
-		const markers = document.querySelectorAll('.comments__marker-checkbox');
+function hideMarkers() {
+	const markers = document.querySelectorAll('.comments__marker-checkbox');
 		for (const marker of markers) {
 			marker.checked = false;
-
 		}
+}
+
+mask.addEventListener('click', event => {
+
+	if (!isCommentsToolsVisible && commentsOn.checked) return; {	
+
+		hideMarkers();
 
 		commentForm.style.top = `${event.offsetY - 14}px`;
 		commentForm.style.left = `${event.offsetX - 22}px`;
 		commentForm.style.display = 'initial';
-		
-
 		commentForm.querySelector('.comment__loader').style.display = 'none';
 		commentForm.querySelector('.comments__marker-checkbox').checked = true;
 		commentForm.querySelector('.comments__input').focus();
 		commentForm.style.zIndex = 100;
-		
-
 		commentForm.querySelector('.comments__close').addEventListener('click', event => {
 
 			commentForm.querySelector('.comments__marker-checkbox').checked = false;
@@ -431,9 +430,6 @@ mask.addEventListener('click', event => {
 app.addEventListener('submit', event => {
 	event.preventDefault();
 	event.target.querySelector('.comment__loader').style.display = 'initial';
-	
-
-
 	event.target.querySelector('.comments__marker-checkbox').checked = true;
 	
 	const input = event.target.querySelector('.comments__input'),
@@ -561,26 +557,12 @@ function init() {
 	burger.style.display = 'inline-block';
     comments.style.display = 'inline-block';
 	commentsTools.style.display = 'inline-block';
+	isCommentsToolsVisible = true;
 	newImg.style.display = 'none';
 	menuUrl.value= window.location.href
 
-	// setTimeout(function() {
-	// 	mask.width = image.clientWidth
-	// 	mask.height = image.clientHeight;
-	// 	document.querySelector('.comment__form').style.display = 'none';
-	// 	const markers = document.querySelectorAll('.comments__marker-checkbox');
-	// 	for (const marker of markers) {
-	// 		marker.checked = false;
-	// 	}
-	// }, 2000);
-
-		document.querySelector('.comment__form').style.display = 'none';
-	
-		
-		const markers = document.querySelectorAll('.comments__marker-checkbox');
-		for (const marker of markers) {
-			marker.checked = false;
-		}
+	document.querySelector('.comment__form').style.display = 'none';
+	hideMarkers();
 	
 	socketConnect();
 	
@@ -613,6 +595,7 @@ function sendFile(file) {
 			init()
 			response = JSON.parse(xhr.responseText);
 			console.log(response);
+			isLoad = true;
 
 			id = response.id;
 			newImg.style.display = 'none';
@@ -621,31 +604,13 @@ function sendFile(file) {
 			burger.style.display = 'inline-block';
 			share.style.display = 'inline-block';
 			shareTools.style.display = 'inline-block';
+			isShareToolsVisible = true
 			host = `${window.location.origin}${window.location.pathname}?id=${id}`;
-    		// localStorage.host = host;
     		
-
     		
-				
-				
-				
-			
-
 			resetComment();
 			resetCanvas();
 
-			// setTimeout(function() {
-			// 	mask.width = image.clientWidth;
-			// 	mask.height = image.clientHeight;
-			// 	document.querySelector('.comment__form').style.display = 'none';
-			// 	const markers = document.querySelectorAll('.comments__marker-checkbox');
-			// 	for (const marker of markers) {
-			// 		marker.checked = false;
-			// 	}
-				
-			// 	resetComment();
-			// 	resetCanvas();
-			// }, 2000);
 
 			socketConnect();
 			history.pushState(null, null, host);
@@ -669,10 +634,7 @@ function socketConnect() {
 			mask.width = image.clientWidth;
 				mask.height = image.clientHeight;
 				document.querySelector('.comment__form').style.display = 'none';
-				const markers = document.querySelectorAll('.comments__marker-checkbox');
-				for (const marker of markers) {
-					marker.checked = false;
-				}
+				hideMarkers();
 		})
 
 		let message = JSON.parse(event.data);
@@ -702,10 +664,7 @@ function socketConnect() {
 			    if (message.pic.comments) {
 			    	
 			    	loadComments(message.pic.comments);
-			    	const markers = document.querySelectorAll('.comments__marker-checkbox');
-					for (const marker of markers) {
-						marker.checked = false;
-					}
+			    	hideMarkers();
 			    	document.querySelector('.comment__form').style.display = 'none';
 			    }
 		    });
@@ -727,8 +686,5 @@ function socketConnect() {
 }
 
 
-// window.addEventListener('click', (event) => {
-// 	alert(`${event.target.className}`)
 
-// })
 
