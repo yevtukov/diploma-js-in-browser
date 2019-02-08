@@ -21,6 +21,7 @@ const app = document.querySelector('.app'),
 	  image = document.querySelector('.current-image'),
 	  imageLoader = document.querySelector('.image-loader');
 
+
 let wss, response, id, isLoad, isShareToolsVisible, isDrawToolsVisible, 
 	isCommentsToolsVisible;
 
@@ -56,18 +57,24 @@ function dropFiles(event) {
 	if (!isLoad) {
 		let file = event.dataTransfer.files[0];
 		if ((file.type === 'image/png') || (file.type === 'image/jpeg')) {
-			err.style.display = 'none';
+			
+			err.classList.remove('display-init');
+			err.classList.add('display-none');
 			sendFile(file);
 		} else {
-			err.style.display = 'initial';
+			
+			err.classList.remove('display-none');
+			err.classList.add('display-init');
 		}	
 	} else {
-		err.style.display = 'initial';
-		err.style.zIndex = '10';
+		err.classList.remove('display-none');
+		err.classList.add('display-init');
+		err.classList.add('z-index-10');
 		document.querySelector('.error__message').textContent 
 		= 'Чтобы загрузить новое изображение, пожалуйста, воспользуйтесь пунктом "Загрузить новое" в меню';
 		document.addEventListener('click', () => {
-			err.style.display = 'none';
+			err.classList.remove('display-init');
+			err.classList.add('display-none');
 		})
 	}		
 }
@@ -106,50 +113,77 @@ function resetCanvas() {
 };
 
 burger.addEventListener('click', () => {
-	burger.style.display = 'none';
-	drawTools.style.display = 'none';
-	isDrawToolsVisible = false;
-	commentsTools.style.display = 'none';
-	isCommentsToolsVisible = false;
-	shareTools.style.display = 'none';
-	newImg.style.display = 'inline-block';
-	comments.style.display = 'inline-block';
-	draw.style.display = 'inline-block';
-	share.style.display = 'inline-block';
 
+	burger.classList.remove('display-inline-block');
+	burger.classList.add('display-none');
+	drawTools.classList.remove('display-inline-block');
+	drawTools.classList.add('display-none');
+	isDrawToolsVisible = false;
+	commentsTools.classList.remove('display-inline-block');
+	commentsTools.classList.add('display-none');
+	isCommentsToolsVisible = false;
+	shareTools.classList.remove('display-inline-block');
+	shareTools.classList.add('display-none');
+	isShareToolsVisible = false;
+	newImg.classList.remove('display-none');
+	newImg.classList.add('display-inline-block');
+	comments.classList.remove('display-none');
+	comments.classList.add('display-inline-block');
+	draw.classList.remove('display-none');
+	draw.classList.add('display-inline-block');
+	share.classList.remove('display-none');
+	share.classList.add('display-inline-block');
 
 });
 
 comments.addEventListener('click', () => {
-	newImg.style.display = 'none';
-	draw.style.display = 'none';
-	share.style.display = 'none';
-	canvas.style.zIndex = 10;
-	mask.style.zIndex = 20;	
-	burger.style.display = 'inline-block';
-	commentsTools.style.display = 'inline-block';
-	isCommentsToolsVisible = true;
+
+	newImg.classList.remove('display-inline-block');
+	newImg.classList.add('display-none');
+	draw.classList.remove('display-inline-block');
+	draw.classList.add('display-none');
+	share.classList.remove('display-inline-block');
+	share.classList.add('display-none');
+	burger.classList.remove('display-none');
+	burger.classList.add('display-inline-block');
+	commentsTools.classList.remove('display-none');
+	commentsTools.classList.add('display-inline-block');
+
+	canvas.classList.remove('z-index-20');
+	canvas.classList.add('z-index-10');
+	mask.classList.remove('z-index-10');
+	mask.classList.add('z-index-20');	
 	
+	isCommentsToolsVisible = true;
 });
 
 share.addEventListener('click', () => {
 
 	if (!isShareToolsVisible) {
+		newImg.classList.remove('display-inline-block');
+		newImg.classList.add('display-none');
+		comments.classList.remove('display-inline-block');
+		comments.classList.add('display-none');
+		draw.classList.remove('display-inline-block');
+		draw.classList.add('display-none');
+		burger.classList.remove('display-none');
+		burger.classList.add('display-inline-block');
+		shareTools.classList.remove('display-none');
+		shareTools.classList.add('display-inline-block');
 
-		newImg.style.display = 'none';
-		comments.style.display = 'none';
-		draw.style.display = 'none';
-		burger.style.display = 'inline-block';
-		shareTools.style.display = 'inline-block';
 		isShareToolsVisible = true;	
 	} else {
-		
+		share.classList.remove('display-inline-block');
+		share.classList.add('display-none');
+		shareTools.classList.remove('display-inline-block');
+		shareTools.classList.add('display-none');
+		burger.classList.remove('display-none');
+		burger.classList.add('display-inline-block');
+		comments.classList.remove('display-none');
+		comments.classList.add('display-inline-block');
+		commentsTools.classList.remove('display-none');
+		commentsTools.classList.add('display-inline-block');
 
-		share.style.display = 'none';
-		shareTools.style.display = 'none';
-		burger.style.display = 'inline-block';
-		comments.style.display = 'inline-block';
-		commentsTools.style.display = 'inline-block';
 		isCommentsToolsVisible = true;
 		isShareToolsVisible = false;
 	}
@@ -183,7 +217,7 @@ const dragMenu = ((x, y) => {
     y = Math.min(y, maxY);
     x = Math.max(x, minX);
     y = Math.max(y, minY);
-    floatMenu.style.whiteSpace = 'nowrap';
+    floatMenu.classList.add('white-space-no-wrap');
     floatMenu.style.left = x + 'px';
     floatMenu.style.top = y + 'px';
   }
@@ -210,13 +244,22 @@ function moveFloatMenu() {
 moveFloatMenu()
 
 draw.addEventListener('click', () => {
-	newImg.style.display = 'none';
-	comments.style.display = 'none';
-	share.style.display = 'none';
-	mask.style.zIndex = 10;
-	canvas.style.zIndex = 20;
-	burger.style.display = 'inline-block';
-	drawTools.style.display = 'inline-block';
+
+	newImg.classList.remove('display-inline-block');
+	newImg.classList.add('display-none');
+	comments.classList.remove('display-inline-block');
+	comments.classList.add('display-none');
+	share.classList.remove('display-inline-block');
+	share.classList.add('display-none');
+	burger.classList.remove('display-none');
+	burger.classList.add('display-inline-block');
+	drawTools.classList.remove('display-none');
+	drawTools.classList.add('display-inline-block');
+	canvas.classList.remove('z-index-10');
+	canvas.classList.add('z-index-20');
+	mask.classList.remove('z-index-20');
+	mask.classList.add('z-index-10');
+	
 	isDrawToolsVisible = true;
 	canvas.width = image.width;
 	canvas.height = image.height;
@@ -389,10 +432,9 @@ commentBody.appendChild(commentInput);
 commentBody.appendChild(commentClose);
 commentBody.appendChild(commentSubmit);
 
-commentForm.style.display = 'none';
-
-commentForm.style.position = 'absolute'
-commentLoader.style.display = 'none';
+commentForm.classList.add('display-none');
+commentForm.classList.add('position-abs');
+commentLoader.classList.add('display-none');
 
 init()
 
@@ -408,20 +450,25 @@ mask.addEventListener('click', event => {
 	if (!isCommentsToolsVisible && commentsOn.checked) return; {	
 
 		hideMarkers();
-
+		
 		commentForm.style.top = `${event.offsetY - 14}px`;
 		commentForm.style.left = `${event.offsetX - 22}px`;
-		commentForm.style.display = 'initial';
-		commentForm.querySelector('.comment__loader').style.display = 'none';
+		commentForm.classList.remove('display-none');
+		commentForm.classList.add('display-init');
+		commentForm.querySelector('.comment__loader').classList.remove('display-init');
+		commentForm.querySelector('.comment__loader').classList.add('display-none');
 		commentForm.querySelector('.comments__marker-checkbox').checked = true;
 		commentForm.querySelector('.comments__input').focus();
-		commentForm.style.zIndex = 100;
+		commentForm.classList.add('z-index-100');
 		commentForm.querySelector('.comments__close').addEventListener('click', event => {
 
 			commentForm.querySelector('.comments__marker-checkbox').checked = false;
 
+
+
 			if(!commentForm.querySelector('.comment__message').textContent) {
-				commentForm.style.display = 'none';
+				commentForm.classList.remove('display-init');
+				commentForm.classList.add('display-none');
 			}
 		});
 	}
@@ -429,7 +476,8 @@ mask.addEventListener('click', event => {
 
 app.addEventListener('submit', event => {
 	event.preventDefault();
-	event.target.querySelector('.comment__loader').style.display = 'initial';
+	event.target.querySelector('.comment__loader').classList.remove('display-none');
+	event.target.querySelector('.comment__loader').classList.add('display-init');
 	event.target.querySelector('.comments__marker-checkbox').checked = true;
 	
 	const input = event.target.querySelector('.comments__input'),
@@ -474,7 +522,8 @@ function loadComments(comments) {
 function renderComment(comment) {
 	const currentFormNode = document.querySelector(`.comment__form[data-left='${comment.left}'][data-top='${comment.top}']`);
 	if (currentFormNode) { 
-    	currentFormNode.querySelector('.comment__loader').style.display = 'none';	
+    	currentFormNode.querySelector('.comment__loader').classList.remove('display-init')	
+    	currentFormNode.querySelector('.comment__loader').classList.add('display-none')	
     	renderNewCommentElement(currentFormNode, comment);
 	} else {
     	placeComment(comment);
@@ -484,12 +533,15 @@ function renderComment(comment) {
 function placeComment(comment) {
 	const commentsFormSimple = commentForm;
 	const commentEl = commentsFormSimple.cloneNode(true);
-	commentEl.style.display = 'initial';
+	
+	commentEl.classList.remove('display-none');
+	commentEl.classList.add('display-init');
     commentEl.style.top = `${comment.top}px`;
     commentEl.style.left = `${comment.left}px`;
     commentEl.dataset.top = comment.top;
     commentEl.dataset.left = comment.left;
-	commentEl.querySelector('.comment__loader').style.display = 'none';		
+	commentEl.querySelector('.comment__loader').classList.remove('display-init')
+	commentEl.querySelector('.comment__loader').classList.add('display-none')		
 	commentEl.querySelector('.comments__marker-checkbox').checked = true;
 
 	let date = new Date();
@@ -500,7 +552,6 @@ function placeComment(comment) {
 	const commentMessage = commentEl.querySelector('.comment__message');
     commentMessage.setAttribute('style', 'white-space: pre;');
     commentMessage.textContent = comment.message;
-
 	const closeBtn = commentEl.querySelector('.comments__close');
     closeBtn.addEventListener('click', () => {
     	commentForm.reset();
@@ -538,10 +589,16 @@ function showCommentForm() {
 	const cmntsForm = document.querySelectorAll('.comment__form')
 	
 	cmntsForm.forEach(cmnt => {
+
 		if (commentsOn.checked) {
-			cmnt.style.display = 'block';
+			cmnt.classList.remove('display-none');
+			cmnt.classList.remove('display-init');
+			cmnt.classList.add('display-block');
+			
 		} else {
-			cmnt.style.display = 'none';
+			cmnt.classList.remove('display-block');
+			cmnt.classList.remove('display-init');
+			cmnt.classList.add('display-none');
 		}
 	})
 }
@@ -553,15 +610,19 @@ function init() {
 	if (window.location.href.indexOf('?id=') !== -1) {
     image.src = localStorage.getItem('saveImg');
     id = localStorage.getItem('saveId');
-    image.style.display = 'inline-block';
-	burger.style.display = 'inline-block';
-    comments.style.display = 'inline-block';
-	commentsTools.style.display = 'inline-block';
-	isCommentsToolsVisible = true;
-	newImg.style.display = 'none';
-	menuUrl.value= window.location.href
 
-	document.querySelector('.comment__form').style.display = 'none';
+	burger.classList.remove('display-none');
+	burger.classList.add('display-inline-block');
+	comments.classList.remove('display-none');
+	comments.classList.add('display-inline-block');
+	commentsTools.classList.remove('display-none');
+	commentsTools.classList.add('display-inline-block');
+	newImg.classList.remove('display-inline-block');
+	newImg.classList.add('display-none');
+	isCommentsToolsVisible = true;
+	menuUrl.value= window.location.href;
+
+	document.querySelector('.comment__form').classList.add('display-none');
 	hideMarkers();
 	
 	socketConnect();
@@ -580,13 +641,17 @@ function sendFile(file) {
 	const xhr = new XMLHttpRequest();
 	xhr.open('POST', 'https://neto-api.herokuapp.com/pic');
 	xhr.addEventListener('loadstart', () => {
-		image.style.display = 'none';
-		imageLoader.style.display = 'initial';
+		
+		image.classList.add('display-none')
+		imageLoader.classList.remove('display-none')
+		imageLoader.classList.add('display-init')
+		
 	});
 
 	xhr.addEventListener('loadend', () => {
-		imageLoader.style.display = 'none'
 		
+		imageLoader.classList.remove('display-init')
+		imageLoader.classList.add('display-none')
 		
 	});
 
@@ -598,20 +663,18 @@ function sendFile(file) {
 			isLoad = true;
 
 			id = response.id;
-			newImg.style.display = 'none';
-			comments.style.display = 'none';
-			draw.style.display = 'none';
-			burger.style.display = 'inline-block';
-			share.style.display = 'inline-block';
-			shareTools.style.display = 'inline-block';
+			newImg.classList.add('display-none');
+			comments.classList.add('display-none');
+			draw.classList.add('display-none');
+			burger.classList.add('display-inline-block');
+			share.classList.add('display-inline-block');
+			shareTools.classList.add('display-inline-block');
+			
 			isShareToolsVisible = true
 			host = `${window.location.origin}${window.location.pathname}?id=${id}`;
     		
-    		
 			resetComment();
 			resetCanvas();
-
-
 			socketConnect();
 			history.pushState(null, null, host);
 			menuUrl.value = host;
@@ -632,9 +695,10 @@ function socketConnect() {
 
 		image.addEventListener('load', () => {
 			mask.width = image.clientWidth;
-				mask.height = image.clientHeight;
-				document.querySelector('.comment__form').style.display = 'none';
-				hideMarkers();
+			mask.height = image.clientHeight;
+
+			document.querySelector('.comment__form').classList.add('display-none')
+			hideMarkers();
 		})
 
 		let message = JSON.parse(event.data);
@@ -644,20 +708,14 @@ function socketConnect() {
 			localStorage.setItem('saveImg', message.pic.url);
 			localStorage.setItem('saveId', message.pic.id);
 			image.src = message.pic.url;
-			image.style.display = 'initial';
+			image.classList.remove('display-none');
+			image.classList.add('initial');
 
 		    image.addEventListener('load', () => {
 				if (message.pic.mask) {
-					// setTimeout(function() {
-					// 	placeMask(message.pic.mask);
-						
-					// }, 1000);
 
-
-						placeMask(message.pic.mask);
+					placeMask(message.pic.mask);
 						
-					
-					
 			    } else {
 			    	resetCanvas()
 			    }
@@ -665,7 +723,9 @@ function socketConnect() {
 			    	
 			    	loadComments(message.pic.comments);
 			    	hideMarkers();
-			    	document.querySelector('.comment__form').style.display = 'none';
+			    	
+			    	document.querySelector('.comment__form').classList.remove('display-block')
+			    	document.querySelector('.comment__form').classList.add('display-none')
 			    }
 		    });
 		}
@@ -684,7 +744,5 @@ function socketConnect() {
 		console.log(`Ошибка: ${error.message}`);
 	});
 }
-
-
 
 
