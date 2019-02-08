@@ -434,6 +434,7 @@ commentBody.appendChild(commentSubmit);
 
 commentForm.classList.add('display-none');
 commentForm.classList.add('position-abs');
+commentForm.classList.add('z-index-100');
 commentLoader.classList.add('display-none');
 
 init()
@@ -453,18 +454,17 @@ mask.addEventListener('click', event => {
 		
 		commentForm.style.top = `${event.offsetY - 14}px`;
 		commentForm.style.left = `${event.offsetX - 22}px`;
+
 		commentForm.classList.remove('display-none');
 		commentForm.classList.add('display-init');
 		commentForm.querySelector('.comment__loader').classList.remove('display-init');
 		commentForm.querySelector('.comment__loader').classList.add('display-none');
 		commentForm.querySelector('.comments__marker-checkbox').checked = true;
 		commentForm.querySelector('.comments__input').focus();
-		commentForm.classList.add('z-index-100');
+
 		commentForm.querySelector('.comments__close').addEventListener('click', event => {
 
 			commentForm.querySelector('.comments__marker-checkbox').checked = false;
-
-
 
 			if(!commentForm.querySelector('.comment__message').textContent) {
 				commentForm.classList.remove('display-init');
@@ -475,11 +475,14 @@ mask.addEventListener('click', event => {
 });
 
 app.addEventListener('submit', event => {
+	// hideMarkers();
+	// document.querySelector('.comment__form').classList.add('display-block')
 	event.preventDefault();
 	event.target.querySelector('.comment__loader').classList.remove('display-none');
 	event.target.querySelector('.comment__loader').classList.add('display-init');
 	event.target.querySelector('.comments__marker-checkbox').checked = true;
-	
+		
+
 	const input = event.target.querySelector('.comments__input'),
 		comment = {'message' : input.value, 'left' : parseInt(event.target.style.left), 'top' : parseInt(event.target.style.top)};                                               
 	
@@ -508,15 +511,18 @@ function sendComment(comment) {
 	request.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
 	request.send(requestArray);
 	console.log(requestArray);
+
 }
 
 function loadComments(comments) {
+
 	for (let comment in comments) {
     	let currentComment = {message: comments[comment].message,
         left: comments[comment].left,
         top: comments[comment].top};                  
     	renderComment(currentComment);
   }
+
 };
 
 function renderComment(comment) {
@@ -525,9 +531,12 @@ function renderComment(comment) {
     	currentFormNode.querySelector('.comment__loader').classList.remove('display-init')	
     	currentFormNode.querySelector('.comment__loader').classList.add('display-none')	
     	renderNewCommentElement(currentFormNode, comment);
+    	document.querySelector('.comment__form').classList.remove('display-block')
+    	document.querySelector('.comment__form').classList.add('display-none')
 	} else {
     	placeComment(comment);
 	}; 
+
 };
 
 function placeComment(comment) {
