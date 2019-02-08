@@ -670,7 +670,7 @@ body {
 
 
 .current-image {
-  display: none;
+  
   position: relative;
   top: 0;
   left: 0;
@@ -720,6 +720,7 @@ body {
   
 }
 
+
 .display-none {
   display: none;
 }
@@ -732,6 +733,10 @@ body {
   display: inline-block;
 }
 
+.display-block {
+  display: block;
+}
+
 .z-index-10 {
   z-index: 10;
 }
@@ -740,3 +745,14 @@ body {
   z-index: 20;
 }
 
+.z-index-100 {
+  z-index: 100;
+}
+
+.white-space-no-wrap {
+  white-space: nowrap;
+}
+
+.position-abs {
+  position: absolute;
+}
