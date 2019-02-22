@@ -70,8 +70,7 @@ function dropFiles(event) {
 		err.classList.remove('display-none');
 		err.classList.add('display-init');
 		err.classList.add('z-index-10');
-		document.querySelector('.error__message').textContent 
-		= 'Чтобы загрузить новое изображение, пожалуйста, воспользуйтесь пунктом "Загрузить новое" в меню';
+		document.querySelector('.error__message').textContent = 'Чтобы загрузить новое изображение, пожалуйста, воспользуйтесь пунктом "Загрузить новое" в меню';
 		document.addEventListener('click', () => {
 			err.classList.remove('display-init');
 			err.classList.add('display-none');
@@ -96,10 +95,9 @@ newImg.addEventListener('click', (event) => {
 function resetComment() {
 
 	const comments = app.querySelectorAll('[data-top]');
-	comments.forEach(comment => {
+	comments.forEach(comment => 
 		comment.remove()
-
-	})	
+	)	
 }
 
 function resetCanvas() {
@@ -109,7 +107,6 @@ function resetCanvas() {
 	const resetImageDraw = canvas;
 	const canvasContextResetImg = resetImageDraw.getContext('2d');
     canvasContextResetImg.clearRect(0, 0, resetImageDraw.width, resetImageDraw.height);
-    
 };
 
 burger.addEventListener('click', () => {
@@ -448,7 +445,7 @@ function hideMarkers() {
 
 mask.addEventListener('click', event => {
 
-	if (!isCommentsToolsVisible && commentsOn.checked) return; {	
+	if (!isCommentsToolsVisible && commentsOn.checked) return; 	
 
 		hideMarkers();
 		
@@ -471,7 +468,6 @@ mask.addEventListener('click', event => {
 				commentForm.classList.add('display-none');
 			}
 		});
-	}
 });
 
 app.addEventListener('submit', event => {
@@ -517,9 +513,11 @@ function sendComment(comment) {
 function loadComments(comments) {
 
 	for (let comment in comments) {
-    	let currentComment = {message: comments[comment].message,
-        left: comments[comment].left,
-        top: comments[comment].top};                  
+    	let currentComment = {
+    		message: comments[comment].message,
+        	left: comments[comment].left,
+        	top: comments[comment].top
+        };                  
     	renderComment(currentComment);
   }
 
@@ -616,7 +614,7 @@ function showCommentForm() {
 
 function init() {
 	
-	if (window.location.href.indexOf('?id=') !== -1) {
+	if (!(window.location.href.indexOf('?id=') !== -1)) return;
     image.src = localStorage.getItem('saveImg');
     id = localStorage.getItem('saveId');
 
@@ -635,8 +633,6 @@ function init() {
 	hideMarkers();
 	
 	socketConnect();
-	
-	};
 }
 
 let host
