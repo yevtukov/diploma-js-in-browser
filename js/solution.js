@@ -264,18 +264,17 @@ draw.addEventListener('click', () => {
 	canvas.height = image.height;
 		
 	const ctx = canvas.getContext('2d'), brushSize = 4;
-	let color = '#6cbe47', curves = [], drawing = false, isRepaint = false;
-	
-	document.querySelector('.red').addEventListener('click', () =>
-		color = '#ea5d56');
-	document.querySelector('.yellow').addEventListener('click', () =>
-		color = '#f3d135');
-	document.querySelector('.green').addEventListener('click', () =>
-		color = '#6cbe47');
-	document.querySelector('.blue').addEventListener('click', () =>
-		color = '#53a7f5');
-	document.querySelector('.purple').addEventListener('click', () =>
-		color = '#b36ade');
+	let currentColor = '#6cbe47', curves = [], drawing = false, isRepaint = false;
+
+	document.querySelector('.red').dataset.color = '#ea5d56';
+	document.querySelector('.yellow').dataset.color = '#f3d135';
+	document.querySelector('.green').dataset.color = '#6cbe47';
+	document.querySelector('.blue').dataset.color = '#53a7f5';
+	document.querySelector('.purple').dataset.color = '#b36ade';
+
+	document.querySelector('.draw-tools').addEventListener('click', (event) => {
+		currentColor = event.target.dataset.color
+	})
 
 	function smoothCurveBetween (p1, p2) {
 	    const cp = p1.map((coord, index) => (coord + p2[index]) / 2);
@@ -285,7 +284,7 @@ draw.addEventListener('click', () => {
 	function smoothCurve(points) {
 	    ctx.beginPath();
 	    ctx.lineWidth = brushSize;
-	    ctx.strokeStyle = color;
+	    ctx.strokeStyle = currentColor;
 	    ctx.lineJoin = 'round';
 	    ctx.lineCap = 'round';
 	  
