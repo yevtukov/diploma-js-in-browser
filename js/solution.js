@@ -34,20 +34,11 @@ if (localStorage.getItem('posX')) {
 
 app.removeChild(commentsForm);
 
-const imageWrap = document.createElement('div');
-let mask = document.createElement('canvas'),
-	canvas = document.createElement('canvas');
+const imageWrap = document.querySelector('.image-wrap');
+let mask = document.querySelector('.mask'),
+	canvas = document.querySelector('.canvas');
 
 resetComment();
-
-imageWrap.className = 'image-wrap';
-mask.className = 'mask';
-canvas.className = 'canvas';
-
-app.appendChild(imageWrap);
-imageWrap.appendChild(image);
-imageWrap.appendChild(mask);
-imageWrap.appendChild(canvas);
 
 app.addEventListener('drop', dropFiles);
 app.addEventListener('dragover', event => event.preventDefault());
