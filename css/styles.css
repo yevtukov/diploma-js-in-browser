@@ -721,19 +721,19 @@ body {
 }
 
 
-.display-none {
+.hidden {
   display: none;
 }
 
-.display-init {
+.visible-init {
   display: initial;
 }
 
-.display-inline-block {
+.visible-inline-block {
   display: inline-block;
 }
 
-.display-block {
+.visible-block {
   display: block;
 }
 

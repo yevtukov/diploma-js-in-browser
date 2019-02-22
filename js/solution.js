@@ -58,22 +58,22 @@ function dropFiles(event) {
 		let file = event.dataTransfer.files[0];
 		if ((file.type === 'image/png') || (file.type === 'image/jpeg')) {
 			
-			err.classList.remove('display-init');
-			err.classList.add('display-none');
+			err.classList.remove('visible-init');
+			err.classList.add('hidden');
 			sendFile(file);
 		} else {
 			
-			err.classList.remove('display-none');
-			err.classList.add('display-init');
+			err.classList.remove('hidden');
+			err.classList.add('visible-init');
 		}	
 	} else {
-		err.classList.remove('display-none');
-		err.classList.add('display-init');
+		err.classList.remove('hidden');
+		err.classList.add('visible-init');
 		err.classList.add('z-index-10');
 		document.querySelector('.error__message').textContent = 'Чтобы загрузить новое изображение, пожалуйста, воспользуйтесь пунктом "Загрузить новое" в меню';
 		document.addEventListener('click', () => {
-			err.classList.remove('display-init');
-			err.classList.add('display-none');
+			err.classList.remove('visible-init');
+			err.classList.add('hidden');
 		})
 	}		
 }
@@ -111,40 +111,40 @@ function resetCanvas() {
 
 burger.addEventListener('click', () => {
 
-	burger.classList.remove('display-inline-block');
-	burger.classList.add('display-none');
-	drawTools.classList.remove('display-inline-block');
-	drawTools.classList.add('display-none');
+	burger.classList.remove('visible-inline-block');
+	burger.classList.add('hidden');
+	drawTools.classList.remove('visible-inline-block');
+	drawTools.classList.add('hidden');
 	isDrawToolsVisible = false;
-	commentsTools.classList.remove('display-inline-block');
-	commentsTools.classList.add('display-none');
+	commentsTools.classList.remove('visible-inline-block');
+	commentsTools.classList.add('hidden');
 	isCommentsToolsVisible = false;
-	shareTools.classList.remove('display-inline-block');
-	shareTools.classList.add('display-none');
+	shareTools.classList.remove('visible-inline-block');
+	shareTools.classList.add('hidden');
 	isShareToolsVisible = false;
-	newImg.classList.remove('display-none');
-	newImg.classList.add('display-inline-block');
-	comments.classList.remove('display-none');
-	comments.classList.add('display-inline-block');
-	draw.classList.remove('display-none');
-	draw.classList.add('display-inline-block');
-	share.classList.remove('display-none');
-	share.classList.add('display-inline-block');
+	newImg.classList.remove('hidden');
+	newImg.classList.add('visible-inline-block');
+	comments.classList.remove('hidden');
+	comments.classList.add('visible-inline-block');
+	draw.classList.remove('hidden');
+	draw.classList.add('visible-inline-block');
+	share.classList.remove('hidden');
+	share.classList.add('visible-inline-block');
 
 });
 
 comments.addEventListener('click', () => {
 
-	newImg.classList.remove('display-inline-block');
-	newImg.classList.add('display-none');
-	draw.classList.remove('display-inline-block');
-	draw.classList.add('display-none');
-	share.classList.remove('display-inline-block');
-	share.classList.add('display-none');
-	burger.classList.remove('display-none');
-	burger.classList.add('display-inline-block');
-	commentsTools.classList.remove('display-none');
-	commentsTools.classList.add('display-inline-block');
+	newImg.classList.remove('visible-inline-block');
+	newImg.classList.add('hidden');
+	draw.classList.remove('visible-inline-block');
+	draw.classList.add('hidden');
+	share.classList.remove('visible-inline-block');
+	share.classList.add('hidden');
+	burger.classList.remove('hidden');
+	burger.classList.add('visible-inline-block');
+	commentsTools.classList.remove('hidden');
+	commentsTools.classList.add('visible-inline-block');
 
 	canvas.classList.remove('z-index-20');
 	canvas.classList.add('z-index-10');
@@ -157,29 +157,29 @@ comments.addEventListener('click', () => {
 share.addEventListener('click', () => {
 
 	if (!isShareToolsVisible) {
-		newImg.classList.remove('display-inline-block');
-		newImg.classList.add('display-none');
-		comments.classList.remove('display-inline-block');
-		comments.classList.add('display-none');
-		draw.classList.remove('display-inline-block');
-		draw.classList.add('display-none');
-		burger.classList.remove('display-none');
-		burger.classList.add('display-inline-block');
-		shareTools.classList.remove('display-none');
-		shareTools.classList.add('display-inline-block');
+		newImg.classList.remove('visible-inline-block');
+		newImg.classList.add('hidden');
+		comments.classList.remove('visible-inline-block');
+		comments.classList.add('hidden');
+		draw.classList.remove('visible-inline-block');
+		draw.classList.add('hidden');
+		burger.classList.remove('hidden');
+		burger.classList.add('visible-inline-block');
+		shareTools.classList.remove('hidden');
+		shareTools.classList.add('visible-inline-block');
 
 		isShareToolsVisible = true;	
 	} else {
-		share.classList.remove('display-inline-block');
-		share.classList.add('display-none');
-		shareTools.classList.remove('display-inline-block');
-		shareTools.classList.add('display-none');
-		burger.classList.remove('display-none');
-		burger.classList.add('display-inline-block');
-		comments.classList.remove('display-none');
-		comments.classList.add('display-inline-block');
-		commentsTools.classList.remove('display-none');
-		commentsTools.classList.add('display-inline-block');
+		share.classList.remove('visible-inline-block');
+		share.classList.add('hidden');
+		shareTools.classList.remove('visible-inline-block');
+		shareTools.classList.add('hidden');
+		burger.classList.remove('hidden');
+		burger.classList.add('visible-inline-block');
+		comments.classList.remove('hidden');
+		comments.classList.add('visible-inline-block');
+		commentsTools.classList.remove('hidden');
+		commentsTools.classList.add('visible-inline-block');
 
 		isCommentsToolsVisible = true;
 		isShareToolsVisible = false;
@@ -242,16 +242,16 @@ moveFloatMenu()
 
 draw.addEventListener('click', () => {
 
-	newImg.classList.remove('display-inline-block');
-	newImg.classList.add('display-none');
-	comments.classList.remove('display-inline-block');
-	comments.classList.add('display-none');
-	share.classList.remove('display-inline-block');
-	share.classList.add('display-none');
-	burger.classList.remove('display-none');
-	burger.classList.add('display-inline-block');
-	drawTools.classList.remove('display-none');
-	drawTools.classList.add('display-inline-block');
+	newImg.classList.remove('visible-inline-block');
+	newImg.classList.add('hidden');
+	comments.classList.remove('visible-inline-block');
+	comments.classList.add('hidden');
+	share.classList.remove('visible-inline-block');
+	share.classList.add('hidden');
+	burger.classList.remove('hidden');
+	burger.classList.add('visible-inline-block');
+	drawTools.classList.remove('hidden');
+	drawTools.classList.add('visible-inline-block');
 	canvas.classList.remove('z-index-10');
 	canvas.classList.add('z-index-20');
 	mask.classList.remove('z-index-20');
@@ -429,10 +429,10 @@ commentBody.appendChild(commentInput);
 commentBody.appendChild(commentClose);
 commentBody.appendChild(commentSubmit);
 
-commentForm.classList.add('display-none');
+commentForm.classList.add('hidden');
 commentForm.classList.add('position-abs');
 commentForm.classList.add('z-index-100');
-commentLoader.classList.add('display-none');
+commentLoader.classList.add('hidden');
 
 init()
 
@@ -452,10 +452,10 @@ mask.addEventListener('click', event => {
 		commentForm.style.top = `${event.offsetY - 14}px`;
 		commentForm.style.left = `${event.offsetX - 22}px`;
 
-		commentForm.classList.remove('display-none');
-		commentForm.classList.add('display-init');
-		commentForm.querySelector('.comment__loader').classList.remove('display-init');
-		commentForm.querySelector('.comment__loader').classList.add('display-none');
+		commentForm.classList.remove('hidden');
+		commentForm.classList.add('visible-init');
+		commentForm.querySelector('.comment__loader').classList.remove('visible-init');
+		commentForm.querySelector('.comment__loader').classList.add('hidden');
 		commentForm.querySelector('.comments__marker-checkbox').checked = true;
 		commentForm.querySelector('.comments__input').focus();
 
@@ -464,18 +464,18 @@ mask.addEventListener('click', event => {
 			commentForm.querySelector('.comments__marker-checkbox').checked = false;
 
 			if(!commentForm.querySelector('.comment__message').textContent) {
-				commentForm.classList.remove('display-init');
-				commentForm.classList.add('display-none');
+				commentForm.classList.remove('visible-init');
+				commentForm.classList.add('hidden');
 			}
 		});
 });
 
 app.addEventListener('submit', event => {
 	// hideMarkers();
-	// document.querySelector('.comment__form').classList.add('display-block')
+	// document.querySelector('.comment__form').classList.add('visible-block')
 	event.preventDefault();
-	event.target.querySelector('.comment__loader').classList.remove('display-none');
-	event.target.querySelector('.comment__loader').classList.add('display-init');
+	event.target.querySelector('.comment__loader').classList.remove('hidden');
+	event.target.querySelector('.comment__loader').classList.add('visible-init');
 	event.target.querySelector('.comments__marker-checkbox').checked = true;
 		
 
@@ -526,11 +526,11 @@ function loadComments(comments) {
 function renderComment(comment) {
 	const currentFormNode = document.querySelector(`.comment__form[data-left='${comment.left}'][data-top='${comment.top}']`);
 	if (currentFormNode) { 
-    	currentFormNode.querySelector('.comment__loader').classList.remove('display-init')	
-    	currentFormNode.querySelector('.comment__loader').classList.add('display-none')	
+    	currentFormNode.querySelector('.comment__loader').classList.remove('visible-init')	
+    	currentFormNode.querySelector('.comment__loader').classList.add('hidden')	
     	renderNewCommentElement(currentFormNode, comment);
-    	document.querySelector('.comment__form').classList.remove('display-block')
-    	document.querySelector('.comment__form').classList.add('display-none')
+    	document.querySelector('.comment__form').classList.remove('visible-block')
+    	document.querySelector('.comment__form').classList.add('hidden')
 	} else {
     	placeComment(comment);
 	}; 
@@ -541,14 +541,14 @@ function placeComment(comment) {
 	const commentsFormSimple = commentForm;
 	const commentEl = commentsFormSimple.cloneNode(true);
 	
-	commentEl.classList.remove('display-none');
-	commentEl.classList.add('display-init');
+	commentEl.classList.remove('hidden');
+	commentEl.classList.add('visible-init');
     commentEl.style.top = `${comment.top}px`;
     commentEl.style.left = `${comment.left}px`;
     commentEl.dataset.top = comment.top;
     commentEl.dataset.left = comment.left;
-	commentEl.querySelector('.comment__loader').classList.remove('display-init')
-	commentEl.querySelector('.comment__loader').classList.add('display-none')		
+	commentEl.querySelector('.comment__loader').classList.remove('visible-init')
+	commentEl.querySelector('.comment__loader').classList.add('hidden')		
 	commentEl.querySelector('.comments__marker-checkbox').checked = true;
 
 	let date = new Date();
@@ -598,14 +598,14 @@ function showCommentForm() {
 	cmntsForm.forEach(cmnt => {
 
 		if (commentsOn.checked) {
-			cmnt.classList.remove('display-none');
-			cmnt.classList.remove('display-init');
-			cmnt.classList.add('display-block');
+			cmnt.classList.remove('hidden');
+			cmnt.classList.remove('visible-init');
+			cmnt.classList.add('visible-block');
 			
 		} else {
-			cmnt.classList.remove('display-block');
-			cmnt.classList.remove('display-init');
-			cmnt.classList.add('display-none');
+			cmnt.classList.remove('visible-block');
+			cmnt.classList.remove('visible-init');
+			cmnt.classList.add('hidden');
 		}
 	})
 }
@@ -618,18 +618,18 @@ function init() {
     image.src = localStorage.getItem('saveImg');
     id = localStorage.getItem('saveId');
 
-	burger.classList.remove('display-none');
-	burger.classList.add('display-inline-block');
-	comments.classList.remove('display-none');
-	comments.classList.add('display-inline-block');
-	commentsTools.classList.remove('display-none');
-	commentsTools.classList.add('display-inline-block');
-	newImg.classList.remove('display-inline-block');
-	newImg.classList.add('display-none');
+	burger.classList.remove('hidden');
+	burger.classList.add('visible-inline-block');
+	comments.classList.remove('hidden');
+	comments.classList.add('visible-inline-block');
+	commentsTools.classList.remove('hidden');
+	commentsTools.classList.add('visible-inline-block');
+	newImg.classList.remove('visible-inline-block');
+	newImg.classList.add('hidden');
 	isCommentsToolsVisible = true;
 	menuUrl.value= window.location.href;
 
-	document.querySelector('.comment__form').classList.add('display-none');
+	document.querySelector('.comment__form').classList.add('hidden');
 	hideMarkers();
 	
 	socketConnect();
@@ -647,16 +647,16 @@ function sendFile(file) {
 	xhr.open('POST', 'https://neto-api.herokuapp.com/pic');
 	xhr.addEventListener('loadstart', () => {
 		
-		image.classList.add('display-none')
-		imageLoader.classList.remove('display-none')
-		imageLoader.classList.add('display-init')
+		image.classList.add('hidden')
+		imageLoader.classList.remove('hidden')
+		imageLoader.classList.add('visible-init')
 		
 	});
 
 	xhr.addEventListener('loadend', () => {
 		
-		imageLoader.classList.remove('display-init')
-		imageLoader.classList.add('display-none')
+		imageLoader.classList.remove('visible-init')
+		imageLoader.classList.add('hidden')
 		
 	});
 
@@ -668,12 +668,12 @@ function sendFile(file) {
 			isLoad = true;
 
 			id = response.id;
-			newImg.classList.add('display-none');
-			comments.classList.add('display-none');
-			draw.classList.add('display-none');
-			burger.classList.add('display-inline-block');
-			share.classList.add('display-inline-block');
-			shareTools.classList.add('display-inline-block');
+			newImg.classList.add('hidden');
+			comments.classList.add('hidden');
+			draw.classList.add('hidden');
+			burger.classList.add('visible-inline-block');
+			share.classList.add('visible-inline-block');
+			shareTools.classList.add('visible-inline-block');
 			
 			isShareToolsVisible = true
 			host = `${window.location.origin}${window.location.pathname}?id=${id}`;
@@ -702,7 +702,7 @@ function socketConnect() {
 			mask.width = image.clientWidth;
 			mask.height = image.clientHeight;
 
-			document.querySelector('.comment__form').classList.add('display-none')
+			document.querySelector('.comment__form').classList.add('hidden')
 			hideMarkers();
 		})
 
@@ -713,7 +713,7 @@ function socketConnect() {
 			localStorage.setItem('saveImg', message.pic.url);
 			localStorage.setItem('saveId', message.pic.id);
 			image.src = message.pic.url;
-			image.classList.remove('display-none');
+			image.classList.remove('hidden');
 			image.classList.add('initial');
 
 		    image.addEventListener('load', () => {
@@ -729,8 +729,8 @@ function socketConnect() {
 			    	loadComments(message.pic.comments);
 			    	hideMarkers();
 			    	
-			    	document.querySelector('.comment__form').classList.remove('display-block')
-			    	document.querySelector('.comment__form').classList.add('display-none')
+			    	document.querySelector('.comment__form').classList.remove('visible-block')
+			    	document.querySelector('.comment__form').classList.add('hidden')
 			    }
 		    });
 		}
