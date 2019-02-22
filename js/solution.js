@@ -370,61 +370,12 @@ function placeMask(url) {
 
 //comments
 
-const commentForm = document.createElement('form'),
-	commentMarker = document.createElement('span'),
-	commentMarkerCheck = document.createElement('input'),
-	commentBody = document.createElement('div'),
-	comment = document.createElement('div'),
-	commentLoader = document.createElement('div'),
-	commentTime = document.createElement('p'),
-	commentMessage = document.createElement('p'),
-	loader = document.createElement('div'),
-	loaderSquare = document.createElement('span'),
-	commentInput = document.createElement('textarea'),
-	commentClose = document.createElement('input'),
-	commentSubmit = document.createElement('input');
-
-commentForm.className = 'comment__form';
-commentMarker.className = 'comments__marker';
-commentMarkerCheck.className = 'comments__marker-checkbox';
-commentMarkerCheck.type = 'checkbox';
-commentMarkerCheck.checked = true;
-commentBody.className = 'comments__body';
-comment.className = 'comment';
-commentTime.className = 'comment__time';
-commentMessage.className = 'comment__message';
-commentLoader.className = 'comment';
-commentLoader.classList.add('comment__loader');
-loader.className = 'loader';
-commentInput.className = 'comments__input';
-commentInput.placeholder = 'Напишите ответ...';
-commentClose.className = 'comments__close';
-commentClose.type = 'button';
-commentClose.value = 'Закрыть';
-commentSubmit.className = 'comments__submit';
-commentSubmit.type = 'submit';
-commentSubmit.value = 'Отправить';
-
+const commentForm = commentsForm.cloneNode(true);
 imageWrap.appendChild(commentForm);
-
-commentForm.appendChild(commentMarker);
-commentForm.appendChild(commentMarkerCheck);
-commentForm.appendChild(commentBody);
-commentBody.appendChild(comment);
-comment.appendChild(commentTime);
-comment.appendChild(commentMessage);
-commentBody.appendChild(commentLoader);
-commentLoader.appendChild(loader);
-loader.appendChild(loaderSquare);
-loader.appendChild(loaderSquare.cloneNode());
-commentBody.appendChild(commentInput);
-commentBody.appendChild(commentClose);
-commentBody.appendChild(commentSubmit);
-
 commentForm.classList.add('hidden');
 commentForm.classList.add('position-abs');
 commentForm.classList.add('z-index-100');
-commentLoader.classList.add('hidden');
+document.querySelector('.comment__loader').classList.add('hidden');
 
 init()
 
@@ -443,13 +394,13 @@ mask.addEventListener('click', event => {
 		
 		commentForm.style.top = `${event.offsetY - 14}px`;
 		commentForm.style.left = `${event.offsetX - 22}px`;
-
 		commentForm.classList.remove('hidden');
 		commentForm.classList.add('visible-init');
 		commentForm.querySelector('.comment__loader').classList.remove('visible-init');
 		commentForm.querySelector('.comment__loader').classList.add('hidden');
 		commentForm.querySelector('.comments__marker-checkbox').checked = true;
 		commentForm.querySelector('.comments__input').focus();
+		commentForm.querySelector('.comment__message').textContent = '';
 
 		commentForm.querySelector('.comments__close').addEventListener('click', event => {
 
@@ -457,14 +408,14 @@ mask.addEventListener('click', event => {
 
 			if(!commentForm.querySelector('.comment__message').textContent) {
 				commentForm.classList.remove('visible-init');
+				commentForm.classList.remove('visible-block');
 				commentForm.classList.add('hidden');
+				
 			}
 		});
 });
 
 app.addEventListener('submit', event => {
-	// hideMarkers();
-	// document.querySelector('.comment__form').classList.add('visible-block')
 	event.preventDefault();
 	event.target.querySelector('.comment__loader').classList.remove('hidden');
 	event.target.querySelector('.comment__loader').classList.add('visible-init');
@@ -472,7 +423,11 @@ app.addEventListener('submit', event => {
 		
 
 	const input = event.target.querySelector('.comments__input'),
-		comment = {'message' : input.value, 'left' : parseInt(event.target.style.left), 'top' : parseInt(event.target.style.top)};                                               
+		comment = {
+			'message' : input.value, 
+			'left' : parseInt(event.target.style.left), 
+			'top' : parseInt(event.target.style.top)
+		};                                               
 	
 	sendComment(comment); 
 	
@@ -480,7 +435,7 @@ app.addEventListener('submit', event => {
 
 function sendComment(comment) {
 
-	commentInput.value = '';
+	document.querySelector('.comments__input').value = '';
 	let requestArray = [];
 	for (let property in comment) {
 		let encodedKey = encodeURIComponent(property);
@@ -516,13 +471,13 @@ function loadComments(comments) {
 };
 
 function renderComment(comment) {
-	const currentFormNode = document.querySelector(`.comment__form[data-left='${comment.left}'][data-top='${comment.top}']`);
+	const currentFormNode = document.querySelector(`.comments__form[data-left='${comment.left}'][data-top='${comment.top}']`);
 	if (currentFormNode) { 
     	currentFormNode.querySelector('.comment__loader').classList.remove('visible-init')	
     	currentFormNode.querySelector('.comment__loader').classList.add('hidden')	
     	renderNewCommentElement(currentFormNode, comment);
-    	document.querySelector('.comment__form').classList.remove('visible-block')
-    	document.querySelector('.comment__form').classList.add('hidden')
+    	document.querySelector('.comments__form').classList.remove('visible-block')
+    	document.querySelector('.comments__form').classList.add('hidden')
 	} else {
     	placeComment(comment);
 	}; 
@@ -585,7 +540,7 @@ commentsBtn.addEventListener('click', showCommentForm);
 
 function showCommentForm() {
 
-	const cmntsForm = document.querySelectorAll('.comment__form')
+	const cmntsForm = document.querySelectorAll('.comments__form')
 	
 	cmntsForm.forEach(cmnt => {
 
@@ -621,9 +576,11 @@ function init() {
 	isCommentsToolsVisible = true;
 	menuUrl.value= window.location.href;
 
-	document.querySelector('.comment__form').classList.add('hidden');
+	document.querySelectorAll('.comments__form').forEach(com => {
+		com.classList.add('hidden')
+	})
+
 	hideMarkers();
-	
 	socketConnect();
 }
 
@@ -694,7 +651,9 @@ function socketConnect() {
 			mask.width = image.clientWidth;
 			mask.height = image.clientHeight;
 
-			document.querySelector('.comment__form').classList.add('hidden')
+			document.querySelectorAll('.comments__form').forEach(com => {
+				com.classList.add('hidden')
+			})
 			hideMarkers();
 		})
 
@@ -721,8 +680,8 @@ function socketConnect() {
 			    	loadComments(message.pic.comments);
 			    	hideMarkers();
 			    	
-			    	document.querySelector('.comment__form').classList.remove('visible-block')
-			    	document.querySelector('.comment__form').classList.add('hidden')
+			    	document.querySelector('.comments__form').classList.remove('visible-block')
+			    	document.querySelector('.comments__form').classList.add('hidden')
 			    }
 		    });
 		}
@@ -741,5 +700,3 @@ function socketConnect() {
 		console.log(`Ошибка: ${error.message}`);
 	});
 }
-
-
