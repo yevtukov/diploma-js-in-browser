@@ -71,12 +71,14 @@ function dropFiles(event) {
 		err.classList.add('visible-init');
 		err.classList.add('z-index-10');
 		document.querySelector('.error__message').textContent = 'Чтобы загрузить новое изображение, пожалуйста, воспользуйтесь пунктом "Загрузить новое" в меню';
-		document.addEventListener('click', () => {
-			err.classList.remove('visible-init');
-			err.classList.add('hidden');
-		})
 	}		
 }
+
+document.addEventListener('click', () => {
+	if(!err.classList.contains('visible-init')) return; 
+		err.classList.remove('visible-init');
+		err.classList.add('hidden');	
+});
 
 newImg.addEventListener('click', (event) => {
 	const input = document.createElement('input');
